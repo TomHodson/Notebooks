@@ -1,0 +1,1061 @@
+{
+ "metadata": {
+  "name": ""
+ },
+ "nbformat": 3,
+ "nbformat_minor": 0,
+ "worksheets": [
+  {
+   "cells": [
+    {
+     "cell_type": "heading",
+     "level": 1,
+     "metadata": {},
+     "source": [
+      "My SymPy Cheat-Sheet"
+     ]
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Preliminaries"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "First things first. Load in SymPy, the engine to do symbolic calculations, and optionally IPython \"display\", which lets you render LaTeX equations in IPython notebooks using MathJax, after you execute the \"init-(underscore)-printing\" command."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "from sympy import *\n",
+      "from IPython.display import display\n",
+      "init_printing(use_latex='mathjax')\n",
+      "%matplotlib inline"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [],
+     "prompt_number": 2
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Defining Variables and Scoping"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "Symbolic variables need to be defined before they are used. One can also define the type and scope of the variable. This might allow the SymPy engine to apply additional simplifications."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "x, y, z = symbols('x, y, z')\n",
+      "m = symbols('m', integer=True)\n",
+      "f = symbols('f', cls=Function)\n",
+      "a, b = symbols('a, b', real=True, positive=True)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [],
+     "prompt_number": 3
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Algebra"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr1 = x + 1"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [],
+     "prompt_number": 4
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "print expr1, type(expr1)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "x + 1 <class 'sympy.core.add.Add'>\n"
+       ]
+      }
+     ],
+     "prompt_number": 5
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "One can plot the expression to see what it looks like"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "plot(expr1,(x,0,3),title='simple plot', xlabel='x', ylabel='x+1')"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "metadata": {},
+       "output_type": "display_data",
+       "png": "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\nh+nTp5sdhoiIDMJimL3r/ChZLJZ+zWcRETFHSC9HISIiY0PJQERElAxERETJQEREUDIQERGUDERE\nBCUDERFByUBERFAyEBERlAxERAQlAxERQclARERQMhAREZQMREQEJQMREUHJQEREUDIQERGUDERE\nBCUDERFByUBERFAyEBERlAxERAQlAxERQclAREQwKRn09fVx7733kpSUhN1u58SJEz7Hi4uLSUhI\nwG63Y7fbOX78uBlhiIjIMI0346T79u2jp6eHDz/8EIfDwdq1a9m3b5/neFNTE+Xl5SQmJprx8SIi\nMkKmVAYHDx5k8eLFAMybN4/Gxkaf44cPH6awsJDU1FSKiorMCEFEREbAlGTQ0dHBlClTPI/HjRtH\nX1+f5/GKFSsoKSmhpqaG+vp6qqurzQhDRESGyZTbRFOmTKGzs9PzuK+vj6ioH/NOfn6+J1ksWbKE\n5uZmlixZ4nOOjIwMCgoKPI9tNhs2m82McEVEIp4pySA5OZmqqirS09NpaGhg5syZnmPt7e3MnDmT\nlpYWYmJiqKmpIScnp985SktLzQhNREQGYDEMwxjrkxqGwX333cfHH38MwJ49ezh8+DBdXV3k5uZS\nUVFBcXExEyZMIC0tjU2bNo11CCIiMgKmJAMREQktmnQmIiJKBiIiomQgIiIoGYiICEoGIiKCkoGI\niKBkICIiKBmIiAjw/8MyInC2qwcIAAAAAElFTkSuQmCC\n",
+       "text": [
+        "<matplotlib.figure.Figure at 0xb06394cc>"
+       ]
+      },
+      {
+       "metadata": {},
+       "output_type": "pyout",
+       "prompt_number": 6,
+       "text": [
+        "<sympy.plotting.plot.Plot at 0xb06394ac>"
+       ]
+      }
+     ],
+     "prompt_number": 6
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "Note that, in general, the python variable \"x\" is different from the SymPy variable \"x\".\n",
+      "\n",
+      "You can use the \"subs\" command to do substitutions."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr = x+y**2*sin(x); print expr.subs(x,1)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "y**2*sin(1) + 1\n"
+       ]
+      }
+     ],
+     "prompt_number": 9
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "You can substitute multiple variables at once"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "print expr.subs({x:1, y:2})"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "1 + 4*sin(1)\n"
+       ]
+      }
+     ],
+     "prompt_number": 11
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "And in case, you need to do non-sequential substitution:"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "print expr.subs([(x,y), (y,x)], simultaneous=True)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "x**2*sin(y) + y\n"
+       ]
+      }
+     ],
+     "prompt_number": 13
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Polynomials"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "One can take any polynomial, and write it out in the canonical expanded form using \"expand\", and back factor them using the command \"factor\". The iPython command \"display\" lets you typeset using MathJax."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expandedForm = expand((x+2)*(x-3)); display(expandedForm)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$x^{2} - x - 6$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        " 2        \n",
+        "x  - x - 6"
+       ]
+      }
+     ],
+     "prompt_number": 9
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "display(factor(expandedForm))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\left(x - 3\\right) \\left(x + 2\\right)$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "(x - 3)\u22c5(x + 2)"
+       ]
+      }
+     ],
+     "prompt_number": 10
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "display(factor(expandedForm + 7 - x))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\left(x - 1\\right)^{2}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "       2\n",
+        "(x - 1) "
+       ]
+      }
+     ],
+     "prompt_number": 11
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "If you have an expression with multiple variables, you can \"collect\" or rewrite it in terms of a particular variable. "
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr = x*y + x - 3 + 2*x**2 - z*x**2 + x**3; display(expr)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$x^{3} - x^{2} z + 2 x^{2} + x y + x - 3$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        " 3    2        2              \n",
+        "x  - x \u22c5z + 2\u22c5x  + x\u22c5y + x - 3"
+       ]
+      }
+     ],
+     "prompt_number": 12
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "collected_expr = collect(expr, x); display(collected_expr)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$x^{3} + x^{2} \\left(- z + 2\\right) + x \\left(y + 1\\right) - 3$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        " 3    2                         \n",
+        "x  + x \u22c5(-z + 2) + x\u22c5(y + 1) - 3"
+       ]
+      }
+     ],
+     "prompt_number": 13
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Trignometry"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "You can use trig identities (sum and double angle identities) to expand out arguments, or carry out simplifications."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "display(expand_trig(sin(x + y))) # uses sum/double angle utilities"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\sin{\\left (x \\right )} \\cos{\\left (y \\right )} + \\sin{\\left (y \\right )} \\cos{\\left (x \\right )}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "sin(x)\u22c5cos(y) + sin(y)\u22c5cos(x)"
+       ]
+      }
+     ],
+     "prompt_number": 14
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "display(trigsimp(sin(x)**4 - 2*cos(x)**2*sin(x)**2 + cos(x)**4))  # applies trig identities"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\frac{1}{2} \\cos{\\left (4 x \\right )} + \\frac{1}{2}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "cos(4\u22c5x)   1\n",
+        "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 + \u2500\n",
+        "   2       2"
+       ]
+      }
+     ],
+     "prompt_number": 15
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Manipulation"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "The multi-purpose simplification command is \"simplify\""
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "a = (x + 1)**2\n",
+      "b = x**2 + 2*x + 1\n",
+      "display(simplify(a - b))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$0$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "0"
+       ]
+      }
+     ],
+     "prompt_number": 16
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "c = x**2 - 2*x + 1\n",
+      "display(simplify(a - c))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$4 x$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "4\u22c5x"
+       ]
+      }
+     ],
+     "prompt_number": 17
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Calculus"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "These are often extremely handy time-savers."
+     ]
+    },
+    {
+     "cell_type": "heading",
+     "level": 3,
+     "metadata": {},
+     "source": [
+      "Derivatives"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "The generic command is \"diff\", you can take derivatives of different order, and with respect to different variables"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "f = (x-1)**m * exp(x); display(f)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\left(x - 1\\right)^{m} e^{x}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "       m  x\n",
+        "(x - 1) \u22c5\u212f "
+       ]
+      }
+     ],
+     "prompt_number": 18
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "Usual first ordered derivative"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "diff(f,x)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\frac{m \\left(x - 1\\right)^{m} e^{x}}{x - 1} + \\left(x - 1\\right)^{m} e^{x}$$"
+       ],
+       "metadata": {},
+       "output_type": "pyout",
+       "prompt_number": 19,
+       "text": [
+        "         m  x              \n",
+        "m\u22c5(x - 1) \u22c5\u212f           m  x\n",
+        "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 + (x - 1) \u22c5\u212f \n",
+        "    x - 1                  "
+       ]
+      }
+     ],
+     "prompt_number": 19
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "Second and higher order order derivatives"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "diff(f,x,2)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\left(x - 1\\right)^{m} \\left(\\frac{m^{2}}{\\left(x - 1\\right)^{2}} + \\frac{2 m}{x - 1} - \\frac{m}{\\left(x - 1\\right)^{2}} + 1\\right) e^{x}$$"
+       ],
+       "metadata": {},
+       "output_type": "pyout",
+       "prompt_number": 20,
+       "text": [
+        "         \u239b    2                          \u239e   \n",
+        "       m \u239c   m        2\u22c5m       m        \u239f  x\n",
+        "(x - 1) \u22c5\u239c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 + \u2500\u2500\u2500\u2500\u2500 - \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 + 1\u239f\u22c5\u212f \n",
+        "         \u239c       2   x - 1          2    \u239f   \n",
+        "         \u239d(x - 1)            (x - 1)     \u23a0   "
+       ]
+      }
+     ],
+     "prompt_number": 20
+    },
+    {
+     "cell_type": "markdown",
+     "metadata": {},
+     "source": [
+      "Perhaps you want to write out an expression for Newton's rule, where $$x_{n+1} = x_{n} - \\frac{f(x_n)}{f'(x_n)}$$"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "g = simplify(x - f/diff(f,x)); display(g)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\frac{m x + x^{2} - 2 x + 1}{m + x - 1}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "       2          \n",
+        "m\u22c5x + x  - 2\u22c5x + 1\n",
+        "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+        "    m + x - 1     "
+       ]
+      }
+     ],
+     "prompt_number": 21
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "One can generate LaTeX output to embed in a document easily;"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "latex(diff(f, x))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "metadata": {},
+       "output_type": "pyout",
+       "prompt_number": 22,
+       "text": [
+        "'\\\\frac{m \\\\left(x - 1\\\\right)^{m} e^{x}}{x - 1} + \\\\left(x - 1\\\\right)^{m} e^{x}'"
+       ]
+      }
+     ],
+     "prompt_number": 22
+    },
+    {
+     "cell_type": "heading",
+     "level": 3,
+     "metadata": {},
+     "source": [
+      "Integrals"
+     ]
+    },
+    {
+     "cell_type": "markdown",
+     "metadata": {},
+     "source": [
+      "The generic integration command is integrate. Note that \"infinity\" is represented as \"oo\". Here we try the integral $I = \\int_{-\\infty}^{\\infty} \\sin x^2 dx$"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "intg = integrate(sin(x**2), (x, -oo, oo)); display(intg)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\frac{\\sqrt{2} \\sqrt{\\pi}}{2}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "  ___   ___\n",
+        "\u2572\u2571 2 \u22c5\u2572\u2571 \u03c0 \n",
+        "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n",
+        "     2     "
+       ]
+      }
+     ],
+     "prompt_number": 23
+    },
+    {
+     "cell_type": "markdown",
+     "metadata": {},
+     "source": [
+      "Or perhaps another interesting one $\\int_0^1 x^{x} dx$"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "intg = integrate(x**x, (x, 0, 1)); display(intg); plot(x**x, (x,0,1))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\int_{0}^{1} x^{x}\\, dx$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "1      \n",
+        "\u2320      \n",
+        "\u23ae  x   \n",
+        "\u23ae x  dx\n",
+        "\u2321      \n",
+        "0      "
+       ]
+      },
+      {
+       "metadata": {},
+       "output_type": "display_data",
+       "png": "iVBORw0KGgoAAAANSUhEUgAAAXoAAAD2CAYAAADYpUyHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz\nAAALEgAACxIB0t1+/AAAIABJREFUeJzt3XtcVWW+x/EPkHkr0FBPjDOZCmqllJdEwXTvrAErNfXQ\nZJejDKlkJ20kKu2MY5dpymZ0ZtI0L1Fa2cxoUvSyacwxNRASL9E0FkamU5qXUi6iou51/niSMHFz\nkc3ae/F9v16+ZLNZa//2En88POv3/J4gy7IsRETEsYLtDkBERHxLiV5ExOGU6EVEHE6JXkTE4ZTo\nRUQcToleRMThapToc3NzcbvdZ30+MzOTvn37Ehsby6JFiwDweDykpKQQGxuL2+2msLCwfiMWEZFa\nuaC6L5g5cyavvPIKF1100RmfP3HiBFOmTCEvL48WLVoQFxfHsGHD+OCDDzh+/DjZ2dnk5uaSmppK\nRkaGz96AiIh4V+2IPjIykjfeeIMfr6vavn07kZGRhIWF0aRJEwYMGMD69evJyspiyJAhAMTExJCX\nl+ebyEVEpEaqTfQjR47kggvOHvgXFxcTFhZW8fjiiy+mqKiI4uJiQkNDKz4fEhKCx+Opp3BFRKS2\nqp26OZewsDBKSkoqHpeUlNCqVStCQ0PP+LzH4yE4+OyfJz17jmX48MsrHrtcLlwuV13DERFxtEOH\noGdP+PLL2h9b50TfrVs3duzYwaFDh2jZsiXr168nLS2NoKAgMjMzSUxMJCcnh+jo6CqP37btZbZu\nVZsdEZGaeOYZ+PnP63ZsjRN9UFAQAMuWLaO0tJRx48Yxa9Ys4uPj8Xg8JCcnExERwYgRI1i9ejVx\ncXEApKen1y0yEREB4OuvYeFCyM+v2/FBdnWvDAoKOusGr4iInG3CBGjVyozq60KJXkTEjxUUQFwc\nfPYZXHJJ3c5h68pYFeOIiHj361/DlCl1T/Jg84j+wAGLNm3seHUREf+3eTMMG2ZG9S1b1v08to7o\nv/nGzlcXEfFvU6eaEf35JHlQohcR8Utr1sBFF0Fy8vmfS4leRMTPeDzw0ENw++3QpMn5n8/WRL9v\nn52vLiLin15/HUJCIDGxfs5X55Wx9UEjehGRMx0/Do8+Ci+9BN+vUz1vto7oi4vtfHUREf/z/PPQ\nvTsMGlR/57R1RP/xx3a+uoiIfzl8GH73O1i7tn7Pa+uIfudOO19dRMS/PP00DB8OV11Vv+e1dUR/\n6BAcPQrNm9sZhYiI/Xbvhm3bYPHi+j+3rSP6n/0Mdu2yMwIREf8wbRr07Qvt29f/uW1N9B071q2J\nvoiIk2zaBP/8p6md9wVbE/3ll2ueXkQaN8uC1FR44gmzEtYXbE/0GtGLSGO2ciUUFcHYsb57DU3d\niIjYpLwcHn4Yfv97sxLWV2wf0WvqRkQaq+efhy5d4MYbffs6tpZXduyI+tGLSKP03Xfw1FPw/vu+\nfy1bNx7xeCxatYIvvoDwcDuiEBGxx5NPwv798Oc/+/61bB3RBwVBt25mL8TYWDsjERFpOJ9+Cn/6\nE/z73w3zerbO0YNJ9J9+ancUIiINZ8oUs3tU27YN83q2juhBiV5EGpd33oHCQsjIaLjX1IheRKSB\nnDgBv/oV/OEPcOGFDfe6XhO9x+MhJSWF2NhY3G43hYWFZzy/bNkyevXqRWxsLLNnz674fK9evXC7\n3bjdbpKr2fBQiV5EGou5c01Z+c03N+zrep26ycjIoLy8nOzsbHJzc0lNTSXj+983vv32W6ZNm8bW\nrVsJCwvD7Xbjcrm44oorAFhbw4bKnTubrm3Hj0PTpuf5bkRE/NTBg/Db38K6dfW3c1RNeR3RZ2Vl\nkZCQAEBMTAx5eXkVzxUWFnL11VfTqlUrgoKC6NevH+vXryc/P5+ysjLi4+MZPHgwubm5XgO48ELo\n0MHMWYmIONX06TB6NFx5ZcO/ttdEX1xcTGhoaMXjkJAQPB4PAFFRUXzyySfs37+fsrIy1qxZQ1lZ\nGS1atCAtLY13332X+fPnc+edd1Yccy6avhERJ/voI9MFYMYMe17f69RNaGgoJSUlFY89Hg/BweZn\nQ+vWrZk9ezajRo0iPDycXr160aZNG7p06UJkZCRgfhiEh4ezd+9e2lfRZHnG9+/64EFYtcrFyJGu\nenpbIiL+wbLg/vvNaP6SS+yJwWuij4uLIzMzk8TERHJycoiOjq547uTJk+Tl5bFhwwaOHz/OoEGD\nePjhh0lPTyc/P5+5c+eyZ88eiouLiYiIqPL8pxN9hw6mF7OIiNO8/jqUlMD48fbF4DXRjxgxgtWr\nVxMXFwdAeno6y5Yto7S0lHHjxhESEkLv3r0JCQkhJSWFTp06kZycTFJSEgMHDqw45vRvAefSrZtp\n7iMi4iSlpZCWZpK9L7tTVsfWXjenX/rQIbjsMigubvi70SIivjJ1Knz1FSxdam8ctq+MBWjdGlq2\nhD17fLNfoohIQysogIUL4eOP7Y7ED1bGnqbKGxFxCsuCBx4wm4qc4xZlg/KbRD9ggHabEhFnyMw0\nf0+ebG8cp/lNom/fHnJy7I5CROT8lJWZBJ+a2rD9bLzxm0R/zTWwdavdUYiInJ+nnoKYGBg82O5I\nfuAXVTcAR46Y3sxFRdCkiR0RiYicn4ICs4nSRx/5V2GJ34zoW7Y0JZa6ISsigej0CtipU/0ryYMf\nJXqAnj01fSMigSkz02z4PWmS3ZGcTYleROQ8lZTAfffB73/vn1PPfpXodUNWRALRb34DN94IgwbZ\nHUnV/OZmLMCBAxAVZVoiqBWCiASCrVshIQE++QTatLE7mqr51Yi+bVu46CItnBKRwHDqFKSkmJJK\nf03y4GeJHjR9IyKB46WXzJx8UpLdkXjnd4m+Z0/Yts3uKEREvNu7F6ZNgxdegGo6sdvO78JT5Y2I\nBILJk+Gee+Cqq+yOpHp+0aa4Mk3diIi/e/ttk6deftnuSGrG70b0HTuaXVkOHLA7EhGRs5WWmpr5\n+fOheXO7o6kZv0v0QUEwahRs2WJ3JCIiZ5s+3dTL+1PTsur4XaIHaNcONm60OwoRkTNt2QJ/+xv8\n4Q92R1I7fpno+/dXohcR/3LiBPzyl/D002bNTyDxq5Wxp+3fD126mAZB/l62JCKNw1NPwYYNsGpV\n4K3c97uqGzBTN23awPbtgVG6JCLO9umnMGsWbN4ceEke/HTqBjR9IyL+weMx9fIzZkCHDnZHUzd+\nm+j79VOiFxH7zZtn/p440d44zofXRO/xeEhJSSE2Nha3201hYeEZzy9btoxevXoRGxvL7Nmza3RM\nTfXvr83CRcReu3ebFsSLFgX2/UKvc/QZGRmUl5eTnZ1Nbm4uqampZGRkAPDtt98ybdo0tm7dSlhY\nGG63G5fLxc6dOzl+/HiVx9RGdLS5yIcPQ6tWdXtzIiJ15fGYzpS/+hV062Z3NOfH68+orKwsEhIS\nAIiJiSEvL6/iucLCQq6++mpatWpFUFAQ/fr1Y/369WRlZTFkyJAqj6mNCy6A3r0hN7dOh4uInJel\nS81e1g89ZHck589roi8uLiY0NLTicUhICB6PB4CoqCg++eQT9u/fT1lZGWvWrOHIkSNej6kt3ZAV\nETt8/TWkpcGjj/rn1oC15XXqJjQ0lJKSkorHHo+H4O8nqlq3bs3s2bMZNWoU4eHh9OrVizZt2vDt\nt9+e85gfmzFjRsXHLpcLl8t1xvP9+sHzz9f2LYmI1J1lwYQJ5ubrNdfYHU398Jro4+LiyMzMJDEx\nkZycHKKjoyueO3nyJHl5eWzYsIHjx48zaNAgHn74Ydq0aXPOY36scqKvSv/+5o73yZNmKkdExNeW\nLIGvvoI33rA7kvrjNX2OGDGC1atXExcXB0B6ejrLli2jtLSUcePGERISQu/evQkJCSElJYVOnTrR\nsWPHs46pq3btzAXfsgX69q3zaUREauT0lM0//gEXXmh3NPXHL1sgVDZ5Mlx6KUyd2gBBiUijZVkw\ndCj06WMWRzmJ31eG3nADvPee3VGIiNP95S9QVGS2B3Qavx/RFxfDT35iNiIJlCb/IhJYdu82I/l/\n/MM5N2Ar8/sRfWioWTyVlWV3JCLiRB4PJCWZhVFOTPIQAIkezE4ua9bYHYWIONHcuXD0qLkJ61QB\nkehvuEGJXkTq32efwWOPmU2+nVzC7fdz9ADHj5v+9Lt3Q+vWPg5MRBqFkychLg7GjAnszpQ1ERAj\n+qZNzT/I++/bHYmIOMXs2RAWBvfea3ckvhcQiR7MPL3KLEWkPmzaBH/6EyxeHJg7RtVWwCR6zdOL\nSH04cgTuustsDfizn9kdTcMIiDl6MCVQ7drBtm3w05/6MDARcbQJE+DYMXMDtrEImBF9cDC43RrV\ni0jdvfUWrF4Nzz1ndyQNK2ASPagdgojU3TffmNH80qVmIWZjEjBTNwCffw4DB5oOc43hBoqI1A/L\ngptuMm0OnnjC7mgaXkCN6Dt3Nq1Dt2+3OxIRCSTz58NFF8H06XZHYo+AWgsWFPRDO4Qrr7Q7GhEJ\nBNu2mQS/caMztgWsi4Aa0YPKLEWk5o4cgdtvhz/+ESIj7Y7GPgGX6K+/3jQgKi+3OxIR8XeTJpm9\np++80+5I7BVwif6//sv0qFc7BBHx5vXXYcMGmDPH7kjsF3CJHmDkSGdt3Csi9WvnTjOaf/11cxO2\nsQuo8srTPv8cBgwwZZYhIfUcmIgEtPJyU7QxcqTZTEQCdEQfGWmmcDZutDsSEfE3jz5qcsQDD9gd\nif8IqPLKyk5P3wwYYHckIuIvMjPNJt9bt2pRZWUBOXUD8PHHMHSomYvTP6iI7NoFffvCypUQG2t3\nNP4lIKduALp3N4sftm61OxIRsVt5OfziF2bfVyX5s3lN9B6Ph5SUFGJjY3G73RQWFp7x/MqVK7n2\n2mvp27cv8+fPr/h8r169cLvduN1ukpOTfRJ4UJCqb0TEmDoV2raFKVPsjsQ/eZ2jz8jIoLy8nOzs\nbHJzc0lNTSUjI6Pi+SlTprB161ZatmzJlVdeyejRo2natCkAa9eu9W3kmESflARPPunzlxIRP/Xm\nm7BiBWzZYtqZy9m8XpasrCwSEhIAiImJIS8v74znmzRpwuHDhykrK8OyLIKCgvjoo48oKysjPj6e\nwYMHk5ub67Pgr73WLJ5SkzORxqmwEKZNM/Xyl1xidzT+y+uIvri4mNBKjZtDQkLweDwEf/9jMzU1\nld69e9OyZUtGjRpFaGgoLVu2JC0tjeTkZHbs2MGQIUMoKCioOKY+BQfDiBHm5ssVV9T76UXEj5WV\nwahRZnPvfv3sjsa/eU30oaGhlJSUVDyunOR3797NnDlz2LVrFy1atOCuu+5i+fLlDBs2jMjvuwdF\nRUURHh7O3r17ad++/VnnnzFjRsXHLpcLl8tV6zcwcqS5ATNtWq0PFZEAZVkwcSJcdRXcd5/d0fg/\nr4k+Li6OzMxMEhMTycnJITo6uuK5Y8eOERISQtOmTQkODqZdu3YcOnSI9PR08vPzmTt3Lnv27KG4\nuJiIiIgqz1850dfVddeZsqpdu6BDh/M+nYgEgAULYPNmyMlReXVNeK2jtyyLiRMnkp+fD0B6ejqb\nN2+mtLSUcePGMXv2bF577TWaNWtGZGQkCxcuBCApKYldu3YBMHPmTPpV8XvV+dbRV/bLX8LVV8Pk\nyfVyOhHxYx9+CLfcAh98AF262B1NYAjYBVOVvf02PPssrFtXL6cTET918CD07m36y48YYXc0gcMR\nif7YMdP75rPP4NJL6+WUIuJnTp6E5GTzf/yZZ+yOJrA4ouq0WTO46y7T40JEnGnqVNi/H377W7sj\nCTyOSPRgyqxefNHcjRcRZ3ntNbMK/pVX4IKAbcVoH8ckepfLLJ5S7xsRZ9myxRRaZGRAeLjd0QQm\nxyT64GDTDmHxYrsjEZH6sn+/uek6bx706GF3NIHLETdjT9u9G3r2hK++gubN6/XUItLATpyAG24w\ne05oXv78OGZED3DZZdCnj/kVT0QCW2oqXHwxPP643ZEEPkclejCLp1580e4oROR8vPCC2VTolVe0\nL3R9cFyiHz7c3JD98ku7I6m5999/3+4Q/IauxQ8a67X45z9h+nSYNQtatTKfa6zXoip1uRaOS/TN\nmsHo0fDSS3ZHUnP6Jv6BrsUPGuO1KCgw/39ffx2ion74fGO8FueiRP+95GRITwePx+5IRKSmDh0y\nPWyefBLcbrujcRZHJvprrjH1tv/8p92RiEhNnDgBiYlw880wbpzd0TiPreWVIiJSO2PGjOGlWs5N\n27qY2Jc/Y777Djp1MnfuW7f22cuIyHl64QVYtAjWrIFKG9pJPXLk1A2Y/SMTEkyPDBHxTytXwmOP\nwV//qiTvS45N9GBuyqqmXsQ/5ebC+PHw1lvQsaPd0TibTxO9x+MhJSWF2NhY3G43hYWFZzyfmZlJ\n3759iY2NZdGiRfX++oMHm9WyH35Y76eutequxbJly+jXrx8DBgzg3nvv9em0lt2quxanjR8/nqlT\npzZwdA2rumuxadMmBg4cyHXXXcftt99OeXm5TZHWry++gFtvNQOxPn3M56q7FitXruTaa6+lb9++\nzJ8/34aoG15ubi7uKkqQap07LR9asWKFlZSUZFmWZeXk5FjDhw+veA6wIiMjrcOHD1vl5eXWtdde\na+3bt6/eY5g1y7Juu63eT1tr3q5FWVmZ1blzZ+vo0aOWZVnW6NGjrbfeesuWOBuCt2tx2vz5863+\n/ftbU6dObejwGpS3a+HxeKxrrrnGKiwstCzLshYsWGB9+umntsRZn7791rK6drWsOXPO/Hx13xeX\nX365dejQIau8vLwidzjZM888Y/Xo0cPq37//GZ+v/P5rmjt9OqLPysoiISEBgJiYGPLy8s54PjIy\nkrCwMJo0acKAAQNYv359vcdwzz3mJs8XX9T7qWvF27Vo1qwZGzdupFmzZgCcPHmS5g7uylbd90V2\ndjYffvghEyZMcPRvNuD9WhQUFBAeHs6sWbNwuVwcPnyYrl272hVqvTh2zIzkhw6F++4787nqvi+a\nNGnC4cOHOXr0KJZlOb5yLzIykjfeeOOs/wPbt2+vde70aaIvLi4mtNIdlpCQEDyVVjGFhYVVfHzx\nxRdTVFRU7zFcfLGZB5w1q95PXSverkVQUBBt27YF4LnnnuPIkSPccMMNtsTZELxdi7179/L4448z\nZ84cxyd58H4tDh48SHZ2Nvfffz/vvfcea9asYe3atXaFet48HkhJge7dq94KsLp8kZqaSu/evene\nvTtDhw4942udaOTIkVxQxS4rxcXFtc6dPk30oaGhlJSUVDz2eDwEB//wkpWfKykpobWP6iAnTTLV\nNwcP+uT0NVLdtfB4PDz44IOsWbOGFStW2BFig/F2LZYvX87Bgwe56aabeOaZZ3jttddYsmSJXaH6\nnLdrER4eTmRkJF27duWCCy4gISHhrFFuoLAss3nIl1+aQVdwFZnH27XYvXs3c+bMYdeuXXz55Zfs\n27eP5cuXN1D0/iUsLKzWudOniT4uLo5Vq1YBkJOTQ3R09BnP79ixg0OHDlFeXs769evp37+/T+K4\n9FKz1eDcuT45fY1Udy0mTJjA8ePHWblyZcUUjlN5uxb3338/eXl5rF27lkceeYQ77riD//mf/7Er\nVJ/zdi06depEaWlpxU3JDRs20L17d1viPF+/+x2sX29aiJ/r29vbtTh27BghISE0bdqU4OBg2rVr\nx+HDhxsidL/TrVu3WudOny6YGjFiBKtXryYuLg6A9PR0li1bRmlpKQCzZs0iPj4ej8dDcnIyERER\nPoslNRUGDoS0NGjRwmcvc07erkWfPn148cUXGThwINdffz0AkydP5tZbb234QBuAt2sx7kfr350+\nD1vdtVi8eDF33HEHlmURFxfHkCFDbI649hYvhoULISvrh26UVanuWowZM4bY2FiaNWtGZGQkY8eO\nbZg3YLPT/wcqX4va5k5H7TBVnVtvhZ//HCZObNCXFWm0MjPNPbJ166BLF7ujaby8Tt3Upa61pjXS\ndkhLgz/8AU6dsjsSEefbuNEsWnzzTSV523mrvaxtXeuhQ4esFStWWGPHjj3nMadV89I+ExtrWX/9\nqy0vLdJobN1qWW3bWtZ779kdiVhWNXX0Na1rLSsrq6hrzcrKqphHrOoYu6WlwbPPmioAEal/BQVw\n003w/PNmdbrYz2uir2lda48ePRg6dChhYWHVHmO3YcOgqMjMGYpI/dq9G268EX77W/jv/7Y7GjnN\na9VNTetaW7RowV133cXy5currRevbMaMGRUfu1wuXC7XebyVmgkOhgcfNKP6Bng5kUZj3z644QaY\nMgWSkuyORirzmujj4uLIzMwkMTGxxnWt3o75scqJviHdfbfZfPhf/zKr9ETk/Hz3ndkG8M47zcIo\n8S9eyysty2LixInk5+cDpq518+bNFbWcs2fP5rXXXquoa124cCEhISFnHdOlilvudpRXVvbcc/DZ\nZzBnjm0hiDhCUZGZrrnlFvj1r8HhSx8CUqOqo6+stNSUfGVmQu/etoUhEtBKSszalD594M9/VpL3\n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\n",
+       "text": [
+        "<matplotlib.figure.Figure at 0xb02fafcc>"
+       ]
+      },
+      {
+       "metadata": {},
+       "output_type": "pyout",
+       "prompt_number": 24,
+       "text": [
+        "<sympy.plotting.plot.Plot at 0xb03ca6cc>"
+       ]
+      }
+     ],
+     "prompt_number": 24
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "It couldn't find a closed for expression for the integral. One can evaluate the integral numerically using \"N\" or \"evalf\" modules, and optionally request the number of significant digits."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "print intg.evalf(10) # Like N[expr,10] in Mathematica\n",
+      "print N(intg, 30)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "0.7834305107\n",
+        "0.783430510712134407059264386527\n"
+       ]
+      }
+     ],
+     "prompt_number": 25
+    },
+    {
+     "cell_type": "heading",
+     "level": 3,
+     "metadata": {},
+     "source": [
+      "Taylor Series and Series Summation"
+     ]
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "\"series\", lets you carry out a taylor series expansion around a point up to a specified order. The \"O\" notation can be suppressed if required."
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr = exp(sin(x))\n",
+      "display(expr.series(x, 0, 4))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$1 + x + \\frac{x^{2}}{2} + \\mathcal{O}\\left(x^{4}\\right)$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "         2        \n",
+        "        x     \u239b 4\u239e\n",
+        "1 + x + \u2500\u2500 + O\u239dx \u23a0\n",
+        "        2         "
+       ]
+      }
+     ],
+     "prompt_number": 26
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "display(expr.series(x, 0, 4).removeO())"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\frac{x^{2}}{2} + x + 1$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        " 2        \n",
+        "x         \n",
+        "\u2500\u2500 + x + 1\n",
+        "2         "
+       ]
+      }
+     ],
+     "prompt_number": 27
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "One can also do Taylor series of two variables using a one-liner"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr = sin(x*cos(y)); display(expr)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\sin{\\left (x \\cos{\\left (y \\right )} \\right )}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        "sin(x\u22c5cos(y))"
+       ]
+      }
+     ],
+     "prompt_number": 28
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr.series(x, 0, 3).removeO().series(y, 0, 3).removeO()"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$- \\frac{x y^{2}}{2} + x$$"
+       ],
+       "metadata": {},
+       "output_type": "pyout",
+       "prompt_number": 29,
+       "text": [
+        "     2    \n",
+        "  x\u22c5y     \n",
+        "- \u2500\u2500\u2500\u2500 + x\n",
+        "   2      "
+       ]
+      }
+     ],
+     "prompt_number": 29
+    },
+    {
+     "cell_type": "raw",
+     "metadata": {},
+     "source": [
+      "Another handy command is summation"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "j = symbols('j',integer=True, positive=True)\n",
+      "expr = summation(j**2, (j,1,m)); display(expr)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "latex": [
+        "$$\\frac{m^{3}}{3} + \\frac{m^{2}}{2} + \\frac{m}{6}$$"
+       ],
+       "metadata": {},
+       "output_type": "display_data",
+       "text": [
+        " 3    2    \n",
+        "m    m    m\n",
+        "\u2500\u2500 + \u2500\u2500 + \u2500\n",
+        "3    2    6"
+       ]
+      }
+     ],
+     "prompt_number": 30
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Solve Equations"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr = x**2 + 3*x + 2\n",
+      "print solve(expr)"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "[-2, -1]\n"
+       ]
+      }
+     ],
+     "prompt_number": 31
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "expr1 = x + y - 2\n",
+      "expr2 = x - y - 4\n",
+      "print solve([expr1, expr2],(x,y))"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "{x: 3, y: -1}\n"
+       ]
+      }
+     ],
+     "prompt_number": 32
+    },
+    {
+     "cell_type": "heading",
+     "level": 2,
+     "metadata": {},
+     "source": [
+      "Units"
+     ]
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "from sympy.physics import units as u"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [],
+     "prompt_number": 33
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "print u.watt"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "kg*m**2/s**3\n"
+       ]
+      }
+     ],
+     "prompt_number": 34
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "mph = u.mile / u.hour\n",
+      "mps = u.meter / u.second"
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [],
+     "prompt_number": 35
+    },
+    {
+     "cell_type": "code",
+     "collapsed": false,
+     "input": [
+      "print N(mps/mph), \"mph = 1 mps\""
+     ],
+     "language": "python",
+     "metadata": {},
+     "outputs": [
+      {
+       "output_type": "stream",
+       "stream": "stdout",
+       "text": [
+        "2.23693629205440 mph = 1 mps\n"
+       ]
+      }
+     ],
+     "prompt_number": 36
+    }
+   ],
+   "metadata": {}
+  }
+ ]
+}
